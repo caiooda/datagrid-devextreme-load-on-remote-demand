@@ -1,0 +1,127 @@
+<dx-data-grid
+width="100%"
+height="100%"
+[dataSource]="dataSource"
+[showRowLines]="false"
+[showColumnLines]="false"
+[columnAutoWidth]="true"
+[allowColumnReordering]="false"
+[allowColumnResizing]="true"
+[columnMinWidth]="50"
+[columnHidingEnabled]="false"
+(onEditorPreparing)="actionEditorPreparing($event)"
+(onContentReady)="actionContentReady($event)"
+(onRowClick)="actionRowClick($event)"
+(onRowPrepared)="actionRowPrepared($event)"
+[(selectedRowKeys)]="selectedRows"
+(onSelectionChanged)="actionSelectionChanged($event)"
+noDataText="Nenhum registro cadastrado."
+[visible]="gridEnabled"
+#dataGrid
+>
+<dxo-remote-operations
+  [filtering]="true"
+  [paging]="true"
+  [sorting]="true"
+  [grouping]="false"
+  [summary]="true"
+  [groupPaging]="false"
+>
+</dxo-remote-operations>
+<dxi-column
+  cellTemplate="fotoTemplate"
+  dataField="foto"
+  caption="Foto (IMG)"
+  [allowFiltering]="false"
+  [allowHiding]="true"
+  [allowGrouping]="false"
+  [allowReordering]="true"
+  [allowResizing]="true"
+  [allowHeaderFiltering]="false"
+  [showInColumnChooser]="true"
+  cssClass="dx-cell"
+  [width]="160"
+  alignment="center"
+  [visible]="false"
+>
+</dxi-column>
+<div *dxTemplate="let d of 'fotoTemplate'">
+  <img
+    [src]="d.data.foto"
+    height="80px"
+    width="80px"
+    *ngIf="d.data.foto"
+  />
+</div>
+<dxi-column
+  dataField="nomeDaFilial"
+  caption="Unidade"
+  [allowHiding]="false"
+  [allowGrouping]="true"
+  [allowReordering]="true"
+  [allowResizing]="true"
+  [showInColumnChooser]="true"
+  [allowHeaderFiltering]="false"
+  [filterOperations]="['=']"
+  cssClass="dx-cell"
+  [width]="220"
+  alignment="center"
+>
+</dxi-column>
+<dxi-column
+  dataField="codigoEPC"
+  caption="EPC"
+  [allowGrouping]="true"
+  [allowReordering]="true"
+  [allowResizing]="true"
+  [showInColumnChooser]="true"
+  [filterOperations]="['=']"
+  [allowHeaderFiltering]="false"
+  cssClass="dx-cell"
+  alignment="center"
+  [visible]="false"
+>
+<dxo-selection
+  mode="multiple"
+  showCheckBoxesMode="onClick"
+  selectAllMode="page"
+>
+</dxo-selection>
+<dxo-paging [pageSize]="300"></dxo-paging>
+<dxo-pager
+  [showInfo]="true"
+  [showNavigationButtons]="true"
+  [showPageSizeSelector]="true"
+  [allowedPageSizes]="[100, 300, 1000]"
+></dxo-pager>
+<dxo-export fileName="Patrimônio Físico"> </dxo-export>
+<dxo-header-filter [visible]="true"> </dxo-header-filter>
+<dxo-filter-row [visible]="true"> </dxo-filter-row>
+<dxo-group-panel [visible]="true"> </dxo-group-panel>
+<dxo-column-chooser
+  title=""
+  mode="select"
+  [enabled]="columnChooserEnabled"
+>
+</dxo-column-chooser>
+<dxo-load-panel [enabled]="false"></dxo-load-panel>
+<dxo-summary>
+  <dxi-total-item
+    column="valorDeMercado"
+    alignment="right"
+    summaryType="sum"
+    [valueFormat]="{ type: 'fixedPoint', precision: 2 }"
+    displayFormat="R$ {0}"
+  >
+  </dxi-total-item>
+</dxo-summary>
+<dxo-state-storing
+  savingTimeout="100"
+  [enabled]="true"
+  type="custom"
+  [storageKey]="gridName"
+  [customSave]="customSaveState"
+  [customLoad]="customLoadState"
+>
+</dxo-state-storing>
+</dx-data-grid>
